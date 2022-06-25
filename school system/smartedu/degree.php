@@ -1,3 +1,36 @@
+<?php
+require './dashBoard/helpers/functions.php';
+require './dashBoard/helpers/dbConnection.php';
+
+$sql = "select * from degree";
+$op  = DoQuery($sql);
+$degreeData=mysqli_fetch_assoc($op);
+/* the name of the student */
+$studentId=$degreeData['StudentId'];
+$sql1="select Name from student where StudentId=$studentId";
+$op1=DoQuery($sql1);
+$studentName=mysqli_fetch_assoc($op1);
+/* the name of the subject */
+$subjectId=$degreeData['SubjectId'];
+$sql2="select title from subject where SubjectId=$subjectId";
+$op2=DoQuery($sql2);
+$subjectName=mysqli_fetch_assoc($op2);
+/* the name of the teacher */
+$teacherId=$degreeData['TeacherId'];
+$sql3="select Name from teacher where TeacherId=teacherId";
+$op3=DoQuery($sql3);
+$teacherName=mysqli_fetch_assoc($op3);
+/* the name of the parent */
+$parentId=$degreeData['ParentId'];
+$sql4="select Name from parent where ParentId=parentId";
+$op4=DoQuery($sql4);
+$parentName=mysqli_fetch_assoc($op4);
+
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,22 +48,22 @@
     <meta name="author" content="">
 
     <!-- Site Icons -->
-    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="shortcut icon" href="resources/images/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="resources/images/apple-touch-icon.png">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="resources/css/bootstrap.min.css">
     <!-- Site CSS -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="resources/style.css">
     <!-- ALL VERSION CSS -->
-    <link rel="stylesheet" href="css/versions.css">
+    <link rel="stylesheet" href="resources/css/versions.css">
     <!-- Responsive CSS -->
-    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="resources/css/responsive.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="resources/css/custom.css">
 
     <!-- Modernizer for Portfolio -->
-    <script src="js/modernizer.js"></script>
+    <script src="resources/js/modernizer.js"></script>
 
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -63,7 +96,7 @@
                               </div>
                               <div class="form-group">
                                 <div class="col-sm-12">
-                                    <input class="form-control" id="email1" placeholder="password" type="password">
+                                    <input class="form-control" id="email1" placeholder="password" type="text">
                                 </div>
                             </div>
                               <div class="row">
@@ -94,8 +127,8 @@
     <header class="top-navbar">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="index.html">
-                <img src="images/logo.png" alt="" />
+            <a class="navbar-brand" href="index.php">
+                <img src="resources/images/logo.png" alt="" />
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbars-host" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="icon-bar"></span>
@@ -104,30 +137,29 @@
             </button>
             <div class="collapse navbar-collapse" id="navbars-host">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                    <li class="nav-item active"><a class="nav-link" href="about.html">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+                    <li class="nav-item active"><a class="nav-link" href="about.php">About Us</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="dropdown-a" data-toggle="dropdown">subject</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown-a">
-                            <a class="dropdown-item" href="course-grid-2.html">primary one</a>
-                            <a class="dropdown-item" href="course-grid-3.html">primary two</a>
+                            <a class="dropdown-item" href="course-grid-2.php">primary one</a>
+                            <a class="dropdown-item" href="course-grid-3.php">primary two</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="dropdown-a" data-toggle="dropdown">Blog </a>
                         <div class="dropdown-menu" aria-labelledby="dropdown-a">
-                            <a class="dropdown-item" href="blog.html">Blog </a>
-                            <a class="dropdown-item" href="blog-single.html">Blog single </a>
+                            <a class="dropdown-item" href="blog.php">Blog </a>
+                            <a class="dropdown-item" href="blog-single.php">Blog single </a>
                         </div>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="teachers.html">Teachers</a></li>
-                    <li class="nav-item"><a class="nav-link" href="degree.html">degree</a></li>
+                    <li class="nav-item"><a class="nav-link" href="teachers.php">Teachers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="degree.php">degree</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a class="hover-btn-new log mr-2" href="#" data-toggle="modal" data-target="#login"><span>parent</span></a></li>
                     <li><a class="hover-btn-new log" href="#" data-toggle="modal" data-target="#login"><span>student</span></a></li>
                 </ul>
-                
             </div>
         </div>
     </nav>
@@ -165,15 +197,27 @@
                     </tfoot>
                     <tbody>
                     </tbody>
-                </table>
+
             </div>
         </div>
     </div>
+    <tbody>
+    <?php while($data=mysqli_fetch_assoc($op)) {?>
+        <tr>
+            <td><?php echo $data['DegreeId']?></td>
+            <td><?php echo $studentName['Name'] ?></td>
+            <td><?php echo $subjectName['title'] ?></td>
+            <td><?php echo $data['degree'] ?></td>
+            <td><?php echo $teacherName['Name'] ?></td>
+           <td><?php echo $parentName['Name'] ?></td> 
+           <td> <a href='edit.php?id=<?php echo $data['DegreeId'];?>' class='btn btn-primary m-r-1em'>Edit</a> </td>
+            <td> <a href='delete.php?id=<?php echo $data['DegreeId'];?>' class='btn btn-danger m-r-1em'>Delete</a> </td> 
+        </tr>
+<?php }?>
 
+</tbody>
 
-
-
-
+</table>
 
 
 
@@ -181,22 +225,22 @@
         <div class="container">
             <div class="row logos">
                 <div class="col-md-2 col-sm-2 col-xs-6 wow fadeInUp">
-                    <a href="#"><img src="images/logo_01.png" alt="" class="img-repsonsive"></a>
+                    <a href="#"><img src="resources/images/logo_01.png" alt="" class="img-repsonsive"></a>
                 </div>
                 <div class="col-md-2 col-sm-2 col-xs-6 wow fadeInUp">
-                    <a href="#"><img src="images/logo_02.png" alt="" class="img-repsonsive"></a>
+                    <a href="#"><img src="resources/images/logo_02.png" alt="" class="img-repsonsive"></a>
                 </div>
                 <div class="col-md-2 col-sm-2 col-xs-6 wow fadeInUp">
-                    <a href="#"><img src="images/logo_03.png" alt="" class="img-repsonsive"></a>
+                    <a href="#"><img src="resources/images/logo_03.png" alt="" class="img-repsonsive"></a>
                 </div>
                 <div class="col-md-2 col-sm-2 col-xs-6 wow fadeInUp">
-                    <a href="#"><img src="images/logo_04.png" alt="" class="img-repsonsive"></a>
+                    <a href="#"><img src="resources/images/logo_04.png" alt="" class="img-repsonsive"></a>
                 </div>
                 <div class="col-md-2 col-sm-2 col-xs-6 wow fadeInUp">
-                    <a href="#"><img src="images/logo_05.png" alt="" class="img-repsonsive"></a>
+                    <a href="#"><img src="resources/images/logo_05.png" alt="" class="img-repsonsive"></a>
                 </div>
                 <div class="col-md-2 col-sm-2 col-xs-6 wow fadeInUp">
-                    <a href="#"><img src="images/logo_06.png" alt="" class="img-repsonsive"></a>
+                    <a href="#"><img src="resources/images/logo_06.png" alt="" class="img-repsonsive"></a>
                 </div>
             </div>
             <!-- end row -->
@@ -274,7 +318,7 @@
         <div class="container">
             <div class="footer-distributed">
                 <div class="footer-center">                   
-                    <p class="footer-company-name">All Rights Reserved. &copy; 2018 <a href="#">SmartEDU</a> Design By : <a href="https://html.design/">html design</a></p>
+                    <p class="footer-company-name">All Rights Reserved. &copy; 2018 <a href="#">SmartEDU</a> Design By :Mariham & Salma</p>
                 </div>
             </div>
         </div>

@@ -2,8 +2,8 @@
 
 session_start();
 
-$server="localhost:4000";
-$database="schoolsystem";
+$server="localhost:8080";
+$database="sm";
 $username="root";
 $password="";
 
