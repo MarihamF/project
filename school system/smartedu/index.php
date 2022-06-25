@@ -33,12 +33,13 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 	}else{ 
 	        // db Code . . .  
 	$password = md5($password); 
-	$sql = "select * from teacher where email ='$email' and password = '$password'"; 
-	$op=DoQuery($sql); 
+
+	$sql1 = "select * from parent where email ='$email' and password = '$password'"; 
+	$op1=DoQuery($sql); 
 	 
-	if(mysqli_num_rows($op)>0){ 
-	$user=mysqli_fetch_assoc($op); 
-	$_SESSION['user']=$user; 
+	if(mysqli_num_rows($op1)>0){ 
+	$user=mysqli_fetch_assoc($op1); 
+	$_SESSION['parent']=$user; 
 	header('Location:'.url('index.php')); 
 	}else{ 
 	$_SESSION['Message']=["Login Error" => "Invalid Email or Password"]; 
