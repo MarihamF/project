@@ -3,6 +3,52 @@ require './dashBoard/helpers/dbConnection.php';
 require './dashBoard/helpers/functions.php';
 $sql="select * from class";
 $op=DoQuery($sql);
+
+
+if($_SERVER['REQUEST_METHOD']=="POST"){ 
+	    // code . . .  
+	$email=Clean($_POST['email']); 
+	$password=Clean($_POST['password']); 
+	
+	     # Validate Input . . .  
+	$errors=[]; 
+	 
+	if(!Validate($email,'required')){ 
+	$errors['Email']="FieldRequired"; 
+	}(!Validate($email,'email')){ 
+	$errors['Email']="InvalidEmail"; 
+	} 
+	 
+	if(!Validate($password,'required')){ 
+	$errors['Password']="Field  Required"; 
+	}elseif(!Validate($password,'min',6)){ 
+	$errors['Password']="Length Must be >= 6 chars"; 
+	} 
+	 
+	 
+	   # Check Errors . . .  
+	 
+	if(count($errors) > 0){ 
+	$_SESSION['Message']=$errors; 
+	}else{ 
+	        // db Code . . .  
+	$password = md5($password); 
+	$sql = "select * from teacher where email ='$email' and password = '$password'"; 
+	$op=DoQuery($sql); 
+	 
+	if(mysqli_num_rows($op)>0){ 
+	$user=mysqli_fetch_assoc($op); 
+	$_SESSION['user']=$user; 
+	header('Location:'.url('index.php')); 
+	}else{ 
+	$_SESSION['Message']=["Login Error" => "Invalid Email or Password"]; 
+	} 
+	 
+	} 
+	} 
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -63,7 +109,11 @@ $op=DoQuery($sql);
 				<!-- Tab panes -->
 				<div class="tab-content">
 					<div class="tab-pane active" id="Login">
-						<form role="form" class="form-horizontal">
+					<?php 
+					// print Errors . . .  
+					 Message(); 
+					 ?>
+						<form role="form" class="form-horizontal" action="<?php echo ($_SERVER['degree.php'])?>"  method="post">
 							<div class="form-group">
 								<div class="col-sm-12">
 									<input class="form-control" id="email1" placeholder="email" type="email">
